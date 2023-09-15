@@ -1,0 +1,22 @@
+[package]
+name = "static_package"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[profile.release]
+opt-level = 'z'
+lto = true
+#codegen-units = 1
+panic = 'abort'
+
+
+[dependencies]
+anyhow = { version = "1", features = ["std"] }
+tokio = { version = "1", features = ["full"] }
+axum = {version = "0.6",features = ["macros","multipart"]}
+tower-http = { version = "0.4", features = ["fs", "add-extension", "trace","limit","decompression-full","compression-full","cors"] }
+hyper = "0.14"
+rust-embed= "8.0.0"
+mime_guess = "2"
+log = { version = "0.4.20", features = [] }
