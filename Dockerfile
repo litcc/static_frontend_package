@@ -7,7 +7,7 @@ COPY group /etc/group
 WORKDIR /app
 
 # Copy our build
-COPY target/x86_64-unknown-linux-musl/release/static_package_upx /app/package
+COPY static_package /app/package
 
 # Use an unprivileged user.
 USER unprivileged:unprivileged
