@@ -7,16 +7,20 @@ edition = "2021"
 [profile.release]
 opt-level = 'z'
 lto = true
-#codegen-units = 1
+codegen-units = 1
 panic = 'abort'
 
+[profile.release.package."*"]
+opt-level = 3
+codegen-units = 1
 
 [dependencies]
+#rudi = { version = "0.8", features = [] }
+#once_cell = "1"
 anyhow = { version = "1", features = ["std"] }
 tokio = { version = "1", features = ["full"] }
-axum = {version = "0.6",features = ["macros","multipart"]}
-tower-http = { version = "0.4", features = ["fs", "add-extension", "trace","limit","decompression-full","compression-full","cors"] }
-hyper = "0.14"
-rust-embed= "8.0.0"
-mime_guess = "2"
+axum = {version = "0.7.4",features = ["macros","multipart"]}
+tower-http = { version = "0.5", features = ["fs", "add-extension", "trace","limit","decompression-full","compression-full","cors"] }
+#mime_guess = "2"
 log = { version = "0.4.20", features = [] }
+serde = { version = "1", features = ["derive"] }

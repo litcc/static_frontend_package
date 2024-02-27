@@ -12,12 +12,16 @@ RUN adduser \
             --shell "/sbin/nologin" \
             --no-create-home \
             --uid "${UID}" \
-            "${USER}"
+            "${USER}" \
+    mkdir -p -m 755 /app/assets \
+    chown -R unprivileged:unprivileged /app \
+    chgrp -R unprivileged:unprivileged /app
+
 
 WORKDIR /app
 
 # Copy our build
-COPY static_package /app/package
+COPY target/x86_64-unknown-linux-musl/release/static_package /app/package
 
 # Use an unprivileged user.
 USER unprivileged:unprivileged

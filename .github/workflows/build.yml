@@ -1,0 +1,58 @@
+name: Build Docker
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Setup repo
+      uses: actions/checkout@v3
+    - name: Get the current Git commit hash
+      run: |
+        export GIT_COMMIT_HASH=$(git rev-parse --short HEAD)
+        echo "GIT_COMMIT_HASH=$GIT_COMMIT_HASH" >> $GITHUB_ENV
+        echo "PACKAGE_NAME=static_package" >> $GITHUB_ENV
+    - name: Update root certificates
+      run: |
+        sudo update-ca-certificates
+        cp -f /etc/ssl/certs/ca-certificates.crt ca-certificates.crt
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ secrets.DOCKER_REGUSTRY }}
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+    - name: Loading cargo-binstall
+      uses: cargo-bins/cargo-binstall@main
+    - name: Install cross
+      run: cargo binstall cross --git https://github.com/cross-rs/cross --force -y
+    - name: Rust Cache
+      uses: Swatinem/rust-cache@v2.7.3
+    - name: Build binary
+      run: cargo update && cross build --release --target x86_64-unknown-linux-musl
+      env:
+        RUST_BACKTRACE: 1
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        push: true
+        tags: ${{ secrets.DOCKER_REGUSTRY }}/${{ secrets.DOCKER_USERNAME }}/${{ env.PACKAGE_NAME }}:latest,${{ secrets.DOCKER_REGUSTRY }}/${{ secrets.DOCKER_USERNAME }}/${{ env.PACKAGE_NAME }}:${{ env.GIT_COMMIT_HASH }}
+    # - name: Build
+    #   run: cargo build --verbose
+    # - name: Run tests
+    #   run: cargo test --verbose
