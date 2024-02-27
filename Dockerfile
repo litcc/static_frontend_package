@@ -13,9 +13,9 @@ RUN adduser \
             --no-create-home \
             --uid "${UID}" \
             "${USER}" \
-    mkdir -p -m 755 /app/assets \
-    chown -R unprivileged:unprivileged /app \
-    chgrp -R unprivileged:unprivileged /app
+    && mkdir -p -m 755 /app/assets \
+    && chown -R unprivileged:unprivileged /app \
+    && chgrp -R unprivileged:unprivileged /app
 
 
 WORKDIR /app
