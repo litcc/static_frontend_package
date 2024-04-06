@@ -1,4 +1,4 @@
-FROM ghcr.dockerproxy.com/litcc/base:latest
+FROM ghcr.io/litcc/base:latest
 
 
 COPY ca-certificates.crt /etc/ssl/certs/
