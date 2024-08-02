@@ -27,6 +27,8 @@ USER unprivileged:unprivileged
 
 LABEL authors="litcc"
 
+EXPOSE 8080/tcp
+
 CMD ["/app/package"]
 
 
