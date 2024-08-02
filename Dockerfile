@@ -1,4 +1,4 @@
-FROM ghcr.dockerproxy.com/litcc/base:latest
+FROM registry.cn-shenzhen.aliyuncs.com/lovol-image/base:latest
 
 
 COPY ca-certificates.crt /etc/ssl/certs/
