@@ -1,7 +1,7 @@
 FROM registry.cn-shenzhen.aliyuncs.com/lovol-image/base:latest
 
 
-
+COPY ca-certificates.crt /etc/ssl/certs/
 # Import from builder.
 ENV USER=unprivileged
 ENV UID=1000
@@ -20,22 +20,12 @@ RUN adduser \
 WORKDIR /app
 
 # Copy our build
-COPY target/x86_64-unknown-linux-musl/release/static_package /app/package
+COPY static_package /app/package
 
 # Use an unprivileged user.
 USER unprivileged:unprivileged
 
-
-LABEL maintainer="i@@litcc.com" \
-    org.label-schema.name="static_package" \
-    org.label-schema.vendor="litcc" \
-    org.label-schema.description="静态文件类型前端包装镜像" \
-    org.label-schema.url="https://github.com/litcc/container-images" \
-    org.opencontainers.image.source="https://github.com/litcc/container-images" \
-    org.label-schema.vcs-url="https://github.com/litcc/container-images" \
-    org.label-schema.license="MIT"
-
-
+LABEL authors="litcc"
 
 EXPOSE 8080/tcp
 
