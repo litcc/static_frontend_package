@@ -41,7 +41,7 @@ jobs:
     - name: Install cross
       run: cargo binstall cross --git https://github.com/cross-rs/cross --force -y
     - name: Rust Cache
-      uses: Swatinem/rust-cache@v2.7.3
+      uses: Swatinem/rust-cache@v2.9.1
     - name: Build binary
       run: cargo update && cross build --release --target x86_64-unknown-linux-musl
       env:
